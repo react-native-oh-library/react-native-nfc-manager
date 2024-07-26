@@ -136,11 +136,19 @@ export function buildNfcExceptionIOS(error) {
   return new NfcErrorBase(error);
 }
 
-export function buildNfcExceptionAndroid(error) {
-  if (error === 'cancelled') {
+
+export function buildNfcExceptionHarmony(error) {
+  if (error.message === 'cancelled') {
     return new UserCancel();
   }
+  return new NfcErrorBase(error.message);
+}
 
+export function buildNfcExceptionAndroid(error) {
+  if (error=== 'cancelled') {
+    return new UserCancel();
+  }
+  console.info('buildNfcExceptionAndroid ===' + JSON.stringify(error));
   return new NfcErrorBase(error);
 }
 

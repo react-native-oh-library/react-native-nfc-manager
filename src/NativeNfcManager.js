@@ -1,7 +1,12 @@
 'use strict';
-import {NativeModules, NativeEventEmitter} from 'react-native';
+import {NativeModules, NativeEventEmitter,TurboModuleRegistry} from 'react-native';
 
-const NativeNfcManager = NativeModules.NfcManager;
+import NfcManager from './NativeNfcManagerHarmony';
+
+//const NativeNfcManager = TurboModuleRegistry ? TurboModuleRegistry.get('NfcManager') : NativeModules.NfcManager;
+
+const NativeNfcManager = TurboModuleRegistry ? NfcManager : NativeModules.NfcManager;
+
 const NfcManagerEmitter = new NativeEventEmitter(NativeNfcManager);
 
 function callNative(name, params = []) {
@@ -14,20 +19,9 @@ function callNative(name, params = []) {
   if (!Array.isArray(params)) {
     throw new Error('params must be an array');
   }
+  const inputParams = [...params];
 
-  const createCallback = (resolve, reject) => (err, result) => {
-    if (err) {
-      reject(err);
-    } else {
-      resolve(result);
-    }
-  };
-
-  return new Promise((resolve, reject) => {
-    const callback = createCallback(resolve, reject);
-    const inputParams = [...params, callback];
-    nativeMethod(...inputParams);
-  });
+  return nativeMethod(...inputParams);
 }
 
 export {NativeNfcManager, NfcManagerEmitter, callNative};
