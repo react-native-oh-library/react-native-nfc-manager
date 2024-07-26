@@ -1,0 +1,1 @@
+export type NFCReadResultCallback<T = string, E = void>  = (err?:E, data?: T) => void;

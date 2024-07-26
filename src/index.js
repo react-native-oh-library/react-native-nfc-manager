@@ -7,12 +7,15 @@ import {
   Nfc15693ResponseFlagIOS,
   NfcManagerIOS,
 } from './NfcManagerIOS';
+import {NfcManagerHarmony} from './NfcManagerHarmony'
 import * as NfcError from './NfcError';
 
 const nfcManager = (() => {
   if (Platform.OS === 'ios') {
     return new NfcManagerIOS();
-  } else {
+  } if (Platform.OS = 'harmony') {
+    return new NfcManagerHarmony();
+  }else {
     return new NfcManagerAndroid();
   }
 })();

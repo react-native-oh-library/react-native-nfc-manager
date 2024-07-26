@@ -53,6 +53,7 @@ class MifareClassicHandlerAndroid {
   }
 
   async mifareClassicWriteBlock(block, data) {
+    console.info('nfcManager.MIFARE_BLOCK_SIZE ===' + this.nfcManager.MIFARE_BLOCK_SIZE);
     if (
       !data ||
       !Array.isArray(data) ||

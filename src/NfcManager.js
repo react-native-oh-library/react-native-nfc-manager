@@ -54,6 +54,7 @@ async function DoNothing() {
 }
 
 class NfcManagerBase {
+
   constructor() {
     this._subscribeNativeEvents();
   }
@@ -143,19 +144,19 @@ class NfcManagerBase {
   }
 
   get MIFARE_BLOCK_SIZE() {
-    return NativeNfcManager.MIFARE_BLOCK_SIZE;
+    return Platform.OS == 'harmony'?NativeNfcManager.getConstants().MIFARE_BLOCK_SIZE:NativeNfcManager.MIFARE_BLOCK_SIZE;
   }
   get MIFARE_ULTRALIGHT_PAGE_SIZE() {
-    return NativeNfcManager.MIFARE_ULTRALIGHT_PAGE_SIZE;
+    return Platform.OS == 'harmony'?NativeNfcManager.getConstants().MIFARE_ULTRALIGHT_PAGE_SIZE:NativeNfcManager.MIFARE_ULTRALIGHT_PAGE_SIZE;
   }
   get MIFARE_ULTRALIGHT_TYPE() {
-    return NativeNfcManager.MIFARE_ULTRALIGHT_TYPE;
+    return Platform.OS == 'harmony'?NativeNfcManager.getConstants().MIFARE_ULTRALIGHT_TYPE:NativeNfcManager.MIFARE_ULTRALIGHT_TYPE;
   }
   get MIFARE_ULTRALIGHT_TYPE_C() {
-    return NativeNfcManager.MIFARE_ULTRALIGHT_TYPE_C;
+    return Platform.OS == 'harmony'?NativeNfcManager.getConstants().MIFARE_ULTRALIGHT_TYPE_C:NativeNfcManager.MIFARE_ULTRALIGHT_TYPE_C;
   }
   get MIFARE_ULTRALIGHT_TYPE_UNKNOWN() {
-    return NativeNfcManager.MIFARE_ULTRALIGHT_TYPE_UNKNOWN;
+    return Platform.OS == 'harmony'?NativeNfcManager.getConstants().MIFARE_ULTRALIGHT_TYPE_UNKNOWN:NativeNfcManager.MIFARE_ULTRALIGHT_TYPE_UNKNOWN;
   }
 
   _onDiscoverTag = (tag) => {
@@ -183,6 +184,7 @@ class NfcManagerBase {
   _onStateChangedAndroid = (state) => {
     const callback = this._clientListeners[NfcEvents.StateChanged];
     if (callback) {
+      console.info('_onStateChangedAndroid ====' + JSON.stringify(state))
       callback(state);
     }
   };
@@ -209,7 +211,7 @@ class NfcManagerBase {
       );
     }
 
-    if (Platform.OS === 'android') {
+    if (Platform.OS === 'android' || Platform.OS === 'harmony') {
       this._subscriptions[
         NfcEvents.StateChanged
       ] = NfcManagerEmitter.addListener(

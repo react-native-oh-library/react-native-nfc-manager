@@ -1,9 +1,9 @@
-import {callNative} from './NativeNfcManager';
-import {NfcManagerBase} from './NfcManager';
-import {MifareClassicHandlerAndroid} from './NfcTech/MifareClassicHandlerAndroid';
-import {MifareUltralightHandlerAndroid} from './NfcTech/MifareUltralightHandlerAndroid';
-import {NdefFormatableHandlerAndroid} from './NfcTech/NdefFormatableHandlerAndroid';
-import {handleNativeException, buildNfcExceptionAndroid} from './NfcError';
+import {callNative} from '@react-native-oh-tpl/react-native-nfc-manager/src/NativeNfcManager';
+import {NfcManagerBase} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcManager';
+import {MifareClassicHandlerAndroid} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcTech/MifareClassicHandlerAndroid';
+import {MifareUltralightHandlerAndroid} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcTech/MifareUltralightHandlerAndroid';
+import {NdefFormatableHandlerAndroid} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcTech/NdefFormatableHandlerAndroid';
+import {handleNativeException, buildNfcExceptionHarmony} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcError';
 
 const NfcAdapter = {
   FLAG_READER_NFC_A: 0x1,
@@ -17,7 +17,7 @@ const NfcAdapter = {
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-class NfcManagerAndroid extends NfcManagerBase {
+class NfcManagerHarmony extends NfcManagerBase {
   constructor() {
     super();
     this.cleanUpTagRegistration = false;
@@ -28,15 +28,18 @@ class NfcManagerAndroid extends NfcManagerBase {
       if (typeof tech === 'string') {
         tech = [tech];
       }
-      const sessionAvailable = await this._hasTagEventRegistrationAndroid();
+
+      const sessionAvailable = await this._hasTagEventRegistrationHarmony();
+
       // make sure we do register for tag event
       if (!sessionAvailable) {
         await this.registerTagEvent(options);
         this.cleanUpTagRegistration = true;
       }
+
       return await callNative('requestTechnology', [tech]);
     } catch (ex) {
-      throw buildNfcExceptionAndroid(ex);
+      throw buildNfcExceptionHarmony(ex);
     }
   };
 
@@ -53,7 +56,7 @@ class NfcManagerAndroid extends NfcManagerBase {
       }
     } catch (ex) {
       if (throwOnError) {
-        throw buildNfcExceptionAndroid(ex);
+        throw buildNfcExceptionHarmony(ex);
       }
     }
   };
@@ -124,10 +127,8 @@ class NfcManagerAndroid extends NfcManagerBase {
   }
 
   // -------------------------------------
-  // Android private
-  // -------------------------------------
-  _hasTagEventRegistrationAndroid = () =>
+  _hasTagEventRegistrationHarmony = () =>
     handleNativeException(callNative('hasTagEventRegistration'));
 }
 
-export {NfcAdapter, NfcManagerAndroid};
+export {NfcAdapter, NfcManagerHarmony};

@@ -252,8 +252,6 @@ declare module 'react-native-nfc-manager' {
     setAlertMessageIOS: (alertMessage: string) => Promise<void>;
     invalidateSessionIOS: () => Promise<void>;
     invalidateSessionWithErrorIOS: (errorMessage: string) => Promise<void>;
-    isSessionAvailableIOS: () => Promise<Boolean>;
-    isTagSessionAvailableIOS: () => Promise<Boolean>;
     sendMifareCommandIOS: (bytes: number[]) => Promise<number[]>;
     sendFelicaCommandIOS: (bytes: number[]) => Promise<number[]>;
     sendCommandAPDUIOS: (
