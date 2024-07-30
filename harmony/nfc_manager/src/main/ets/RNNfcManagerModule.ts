@@ -28,7 +28,7 @@ import NFCReadManager from './NFCReadManager';
 
 export type TurboModuleContext = RNOHContext;
 
-export class NfcManagerModule extends TurboModule implements TM.NfcManager.Spec {
+export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spec {
 
   private isForegroundEnabled:boolean = false;
   private isForeground:boolean = false;

@@ -1,2 +1,2 @@
-export * from "./src/main/ets/NfcManagerPackage"
-export * from "./src/main/ets/NfcManagerModule"
+export * from "./src/main/ets/RNNfcManagerPackage"
+export * from "./src/main/ets/RNNfcManagerModule"
