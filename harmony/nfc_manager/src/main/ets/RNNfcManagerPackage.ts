@@ -19,13 +19,13 @@ import type {
   TurboModuleContext,
 } from '@rnoh/react-native-openharmony/ts';
 import { TM, RNC } from "@rnoh/react-native-openharmony/generated/ts"
-import { NfcManagerModule } from './NfcManagerModule';
+import { RNNfcManagerModule } from './RNNfcManagerModule';
 
 
-class NfcManagerTurboModulesFactory extends TurboModulesFactory {
+class RNNfcManagerTurboModulesFactory extends TurboModulesFactory {
   createTurboModule(name: string): TurboModule | null {
     if (name === 'NfcManager' || name === TM.NfcManager.NAME) {
-      return new NfcManagerModule(this.ctx);
+      return new RNNfcManagerModule(this.ctx);
     }
     return null;
   }
@@ -35,8 +35,8 @@ class NfcManagerTurboModulesFactory extends TurboModulesFactory {
   }
 }
 
-export class NfcManagerPackage extends RNPackage {
+export class RNNfcManagerPackage extends RNPackage {
   createTurboModulesFactory(ctx: TurboModuleContext): TurboModulesFactory {
-    return new NfcManagerTurboModulesFactory(ctx);
+    return new RNNfcManagerTurboModulesFactory(ctx);
   }
 }
