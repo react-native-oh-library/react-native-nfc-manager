@@ -166,7 +166,7 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  mifareClassicWriteBlock(block: number, data: number[]): Promise<void> {
+  async mifareClassicWriteBlock(block: number, data: number[]): Promise<void> {
     if(this.techRequest !== null) {
       try {
         let mifareClassic: tag.MifareClassicTag = this.techRequest.getTechHandle() as tag.MifareClassicTag;
@@ -176,7 +176,7 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
           let msg = `mifareClassicWriteBlock fail: invalid block size ${data.length} (should be ${Constants.MIFARE_BLOCK_SIZE})`;
           return Promise.reject(msg)
         }
-        mifareClassic.writeSingleBlock(block,data);
+        await mifareClassic.writeSingleBlock(block,data);
         return Promise.resolve();
       } catch (error) {
         return Promise.reject("mifareClassicWriteBlock fail: ")
@@ -186,7 +186,7 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  mifareClassicIncrementBlock(block:number, data: number) : Promise<void> {
+  async mifareClassicIncrementBlock(block:number, data: number) : Promise<void> {
     if(this.techRequest !== null) {
       try {
         let mifareClassic: tag.MifareClassicTag = this.techRequest.getTechHandle() as tag.MifareClassicTag;
@@ -196,7 +196,7 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
         if (!mifareClassic.isConnected()) {
           return Promise.reject('mifareClassic connectTag failed.')
         }
-        mifareClassic.incrementBlock(block,data);
+        await mifareClassic.incrementBlock(block,data);
         return Promise.resolve();
       } catch (error) {
         return Promise.reject("mifareClassicIncrementBlock fail:")
@@ -206,14 +206,14 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  mifareClassicTransferBlock(block: number) : Promise<void> {
+  async mifareClassicTransferBlock(block: number) : Promise<void> {
     if(this.techRequest !== null) {
       try {
         let mifareClassic: tag.MifareClassicTag = this.techRequest.getTechHandle() as tag.MifareClassicTag;
         if(mifareClassic === null || mifareClassic.getType() === tag.MifareClassicType.TYPE_UNKNOWN) {
           return Promise.reject('mifareClassicSectorToBlock fail: TYPE_UNKNOWN')
         }
-        mifareClassic.transferToBlock(block);
+        await mifareClassic.transferToBlock(block);
         return Promise.resolve();
       } catch (error) {
         return Promise.reject("mifareClassicTransferBlock fail:")
@@ -223,14 +223,14 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  mifareClassicDecrementBlock(block: number,data:number) : Promise<void> {
+  async mifareClassicDecrementBlock(block: number,data:number) : Promise<void> {
     if(this.techRequest !== null) {
       try {
         let mifareClassic: tag.MifareClassicTag = this.techRequest.getTechHandle() as tag.MifareClassicTag;
         if(mifareClassic === null || mifareClassic.getType() === tag.MifareClassicType.TYPE_UNKNOWN) {
           return Promise.reject('mifareClassicSectorToBlock fail: TYPE_UNKNOWN')
         }
-        mifareClassic.decrementBlock(block,data);
+        await mifareClassic.decrementBlock(block,data);
         return Promise.resolve();
       } catch (error) {
         return Promise.reject("mifareClassicDecrementBlock fail:")
@@ -259,15 +259,15 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  mifareClassicAuthenticateA(sectorIndex:number,key:	number[]):Promise<void>{
+  async mifareClassicAuthenticateA(sectorIndex:number,key:	number[]):Promise<void>{
     return this.mifareClassicAuthenticate('isKeyA',sectorIndex,key);
   }
 
-  mifareClassicAuthenticateB(sectorIndex:number,key:	number[]):Promise<void>{
+  async mifareClassicAuthenticateB(sectorIndex:number,key:	number[]):Promise<void>{
     return this.mifareClassicAuthenticate('isKeyB',sectorIndex,key);
   }
 
-  mifareClassicAuthenticate(type:string,sectorIndex:number,key:	number[]):Promise<void> {
+  async mifareClassicAuthenticate(type:string,sectorIndex:number,key:	number[]):Promise<void> {
     if(this.techRequest !== null) {
       try {
         let mifareClassic: tag.MifareClassicTag = this.techRequest.getTechHandle() as tag.MifareClassicTag;
@@ -280,7 +280,7 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
           let msg = `mifareClassicAuthenticate fail: invalid key (needs length 6 but has ${key.length} characters)`
           return Promise.reject(msg);
         }
-        mifareClassic.authenticateSector(sectorIndex,key,type === 'isKeyA' ? true : false);
+        await mifareClassic.authenticateSector(sectorIndex,key,type === 'isKeyA' ? true : false);
         console.info(TAG,'mifareClassicAuthenticate === ' + true);
         return Promise.resolve();
       } catch (error) {
@@ -308,14 +308,14 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  mifareUltralightWritePage(offset: number,data: number[]):Promise<void> {
+  async mifareUltralightWritePage(offset: number,data: number[]):Promise<void> {
     if(this.techRequest !== null) {
       try {
         let mifareUltralightTag: tag.MifareUltralightTag = this.techRequest.getTechHandle() as tag.MifareUltralightTag;
         if(mifareUltralightTag === null) {
           return Promise.reject(Constants.ERR_API_NOT_SUPPORT);
         }
-        mifareUltralightTag.writeSinglePage(offset,data);
+        await mifareUltralightTag.writeSinglePage(offset,data);
         return Promise.resolve();
       } catch (error) {
         return Promise.reject("mifareUltralightWritePage fail:"+ JSON.stringify(error))
@@ -325,7 +325,7 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
-  formatNdef(bytes: number[], options?: { readOnly: boolean }):Promise<void> {
+  async formatNdef(bytes: number[], options?: { readOnly: boolean }):Promise<void> {
     let readOnly = options?.readOnly;
     if(this.techRequest !== null) {
       try {
@@ -335,9 +335,9 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
         } else {
           let ndefMessage = tag.ndef.createNdefMessage(bytes);
           if(readOnly) {
-            ndefFormatable.formatReadOnly(ndefMessage);
+            await ndefFormatable.formatReadOnly(ndefMessage);
           } else {
-            ndefFormatable.format(ndefMessage);
+            await ndefFormatable.format(ndefMessage);
           }
         }
         return Promise.resolve();
@@ -923,4 +923,3 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     return parsed;
   }
 }
-
