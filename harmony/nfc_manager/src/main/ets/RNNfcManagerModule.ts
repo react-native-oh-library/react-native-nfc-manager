@@ -25,6 +25,7 @@ import { Constants } from './constants/Constants';
 import TagTechnologyRequest from './nfc/TagTechnologyRequest';
 import Util from './utils/Util';
 import NFCReadManager from './NFCReadManager';
+import { NfcAdapter } from './model/NfcAdapter';
 
 export type TurboModuleContext = RNOHContext;
 
@@ -348,13 +349,19 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
   }
 
+
   connect(techs:TM.NfcManager.NfcTech[]): Promise<void> {
     try {
       this.techRequest = new TagTechnologyRequest(techs);
+      this.techRequest.setNFCReadResultListener((err,data) => {
+        if(!err){
+          Logger.info(' techs connect ' + JSON.stringify(data))
+        }
+      })
       let isConnect =  this.techRequest.onConnect(this.nfcTagInfo);
       return Promise.resolve();
     } catch (error) {
-      return Promise.reject(JSON.stringify(error));
+      return Promise.reject(Constants.ERR_NO_NFC_SUPPORT);
     }
   }
 
@@ -674,11 +681,27 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     }
     return elementName;
   }
-
-  builderDiscTech() {
-    let discTech: number[] = [tag.NFC_A, tag.NFC_B]
-    return discTech
-  }
+  builderDiscTech(readerModeFlags:number) {
+    let discTech:number[] = []
+     switch (readerModeFlags) {
+       case NfcAdapter.FLAG_READER_NFC_A:
+         discTech.push(tag.NFC_A);
+         break;
+       case NfcAdapter.FLAG_READER_NFC_B:
+         discTech.push(tag.NFC_B);
+         break;
+       case NfcAdapter.FLAG_READER_NFC_F:
+         discTech.push(tag.NFC_F);
+         break;
+       case NfcAdapter.FLAG_READER_NFC_V:
+         discTech.push(tag.NFC_V);
+         break;
+       default :
+         discTech = [tag.NFC_A, tag.NFC_B];
+         break
+     }
+     return discTech
+   }
 
   hasPendingRequest() {
     return this.techRequest !== null ? true : false;
@@ -768,15 +791,9 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
   registerTagEvent(options: TM.NfcManager.RegisterTagEventOpts): Promise<void> {
     this.isReaderModeEnabled = options.isReaderModeEnabled;
     this.readerModeFlags = options.readerModeFlags;
-    if(options.readerModeFlags) {
-      this.discTech = this.builderDiscTech();
-    } else {
-      this.discTech.push(this.readerModeFlags);
-    }
+    this.discTech = this.builderDiscTech(this.readerModeFlags);
     this.readerModeDelay = options.readerModeDelay;
-    Logger.info(TAG,'registerTagEvent');
     this.isForegroundEnabled = true;
-
     if(this.isForeground) {
       this.enableDisableForegroundDispatch(true);
     }
