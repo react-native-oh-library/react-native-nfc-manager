@@ -733,9 +733,9 @@ export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spe
     this.ctx.rnInstance.emitDeviceEvent(eventName,payload);
   }
 
-  start():Promise<void>{
+  async start():Promise<void>{
     //判断当前设置是否支持NDF
-    let nfcAvailable = this.isSupported();
+    let nfcAvailable = await this.isSupported();
     if(!nfcAvailable) {
       Logger.info(TAG,"not support in this device")
       return Promise.reject(Constants.ERR_NO_NFC_SUPPORT)
