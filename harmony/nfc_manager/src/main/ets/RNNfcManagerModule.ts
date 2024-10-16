@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { RNOHContext, TurboModule } from '@rnoh/react-native-openharmony/ts';
+import {
+  TurboModule,
+  TurboModuleContext,
+} from "@rnoh/react-native-openharmony/ts";
 import { TM } from "@rnoh/react-native-openharmony/generated/ts"
 import { nfcController } from '@kit.ConnectivityKit';
 const TAG: string = '[NfcManagerModule====>]';
@@ -26,8 +29,6 @@ import TagTechnologyRequest from './nfc/TagTechnologyRequest';
 import Util from './utils/Util';
 import NFCReadManager from './NFCReadManager';
 import { NfcAdapter } from './model/NfcAdapter';
-
-export type TurboModuleContext = RNOHContext;
 
 export class RNNfcManagerModule extends TurboModule implements TM.NfcManager.Spec {
 
