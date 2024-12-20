@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd. All rights reserved
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 import {callNative} from '@react-native-oh-tpl/react-native-nfc-manager/src/NativeNfcManager';
 import {NfcManagerBase} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcManager';
 import {MifareClassicHandlerAndroid} from '@react-native-oh-tpl/react-native-nfc-manager/src/NfcTech/MifareClassicHandlerAndroid';

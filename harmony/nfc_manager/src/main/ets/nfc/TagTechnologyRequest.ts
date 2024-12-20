@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2024 Huawei Device Co., Ltd. All rights reserved
+ * Use of this source code is governed by a MIT license that can be
+ * found in the LICENSE file.
+ */
+
 import { ArrayList } from '@kit.ArkTS';
 import { NFCReadResultCallback } from '../callback/NFCReadResultCallback';
 import tag from '@ohos.nfc.tag';

@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "react-native-nfc-manager",
+        "License": "MIT License",
+        "License File": "https://github.com/revtel/react-native-nfc-manager/blob/main/LICENSE",
+        "Version Number": "3.15.0-0.0.4",
+        "Owner" : "xiafeng@huawei.com",
+        "Upstream URL": "https://github.com/revtel/react-native-nfc-manager",
+        "Description": "nfc-manager for react-native"
+    }
+]
